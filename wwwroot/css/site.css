@@ -1533,3 +1533,199 @@ footer ul {
 .village-item:nth-child(14) {
     animation-delay: 0.44s;
 }
+/* ========== RESPONSIVE MOBILE ========== */
+@media (max-width: 768px) {
+
+    nav {
+        padding: 0 1.5rem;
+        height: auto;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+        nav ul {
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+            nav ul a {
+                font-size: 0.8rem;
+            }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 3rem 1.5rem;
+        min-height: auto;
+        gap: 2rem;
+    }
+
+        .hero h1 {
+            font-size: 2.4rem;
+        }
+
+    .stat-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .about-section {
+        padding: 3rem 1.5rem;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .about-logo {
+        width: 150px;
+    }
+
+    .about-stats {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .mission-section {
+        padding: 3rem 1.5rem;
+    }
+
+    .mission-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .how-section {
+        padding: 3rem 1.5rem;
+    }
+
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .step-line {
+        display: none;
+    }
+
+    .community-section {
+        padding: 3rem 1.5rem;
+    }
+
+    .community-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .petitions-page {
+        padding: 2rem 1.5rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .petitions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-bar {
+        gap: 0.5rem;
+    }
+
+    .auth-section {
+        padding: 1.5rem;
+    }
+
+    .auth-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .map-page {
+        padding: 2rem 1.5rem;
+    }
+
+    .map-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .map-sidebar {
+        position: static;
+    }
+
+    .admin-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-sidebar {
+        position: static;
+        height: auto;
+    }
+
+    .admin-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .admin-content {
+        padding: 1.5rem;
+    }
+
+    footer {
+        padding: 2rem 1.5rem;
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+        footer ul {
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+    #grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    #d-districts {
+        grid-template-columns: 1fr !important;
+    }
+
+    .chat-popup {
+        width: calc(100vw - 2rem);
+        right: 1rem;
+        bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .mission-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .community-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+    #grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    nav ul {
+        gap: 0.75rem;
+    }
+}
