@@ -1,0 +1,75 @@
+﻿@model List<ayul_dayusy.Models.Petition>
+@{
+    ViewData["Title"] = "Петицияларды басқару";
+}
+
+<div class="admin-wrap">
+    <div class="admin-sidebar">
+        <div class="admin-logo">Админ <span>панель</span></div>
+        <nav class="admin-nav">
+            <a href="/Admin/Index" class="admin-nav-link">Басты бет</a>
+            <a href="/Admin/Petitions" class="admin-nav-link active">Петициялар</a>
+            <a href="/Admin/Users" class="admin-nav-link">Пайдаланушылар</a>
+            <a href="/" class="admin-nav-link">Сайтқа оралу</a>
+        </nav>
+    </div>
+
+    <div class="admin-content">
+        <h1 class="admin-title">Петициялар — @Model.Count</h1>
+
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Тақырып</th>
+                        <th>Облыс</th>
+                        <th>Санат</th>
+                        <th>Дауыс</th>
+                        <th>Күні</th>
+                        <th>Күй</th>
+                        <th>Әрекет</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td><strong>@p.Title</strong><br /><small style="color:var(--muted);">@p.AuthorName</small></td>
+                            <td>@p.Region</td>
+                            <td><span class="tag">@p.Category</span></td>
+                            <td><strong>@p.VoteCount</strong></td>
+                            <td>@p.CreatedAt.ToString("dd.MM.yy")</td>
+                            <td>
+                                @if (p.IsSolved)
+                                {
+                                    <span class="badge green">Шешілді</span>
+                                }
+                                else
+                                {
+                                    <span class="badge gold">Белсенді</span>
+                                }
+                            </td>
+                            <td>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <form method="post" action="/Admin/SolvePetition" style="margin:0;">
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <button type="submit" class="admin-btn blue">
+                                            @(p.IsSolved ? "Қайту" : "Шешілді")
+                                        </button>
+                                    </form>
+                                    <form method="post" action="/Admin/DeletePetition" style="margin:0;">
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <button type="submit" class="admin-btn red"
+                                                onclick="return confirm('Жою керек пе?')">
+                                            Жою
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

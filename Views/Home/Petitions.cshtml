@@ -1,0 +1,93 @@
+﻿@model List<ayul_dayusy.Models.Petition>
+@{
+    ViewData["Title"] = "Петициялар";
+    var votedIds = ViewBag.VotedIds as List<int> ?? new List<int>();
+}
+
+<div class="petitions-page">
+    <div class="page-header">
+        <div>
+            <h1>Петициялар</h1>
+            <p>Барлық белсенді петициялар — дауыс беріңіз!</p>
+        </div>
+        @if (User.Identity!.IsAuthenticated)
+        {
+            <a href="/Home/Submit" class="btn-primary">+ Петиция жасау</a>
+        }
+        else
+        {
+            <a href="/Account/Register" class="btn-primary">Тіркеліп петиция жасаңыз</a>
+        }
+    </div>
+
+    <div class="filter-bar">
+        <a href="/Home/Petitions" class="filter-btn @(ViewBag.Category == null && ViewBag.Region == null ? "active" : "")">Барлығы</a>
+        <a href="/Home/Petitions?category=Жол" class="filter-btn @(ViewBag.Category == "Жол" ? "active" : "")">Жол</a>
+        <a href="/Home/Petitions?category=Су" class="filter-btn @(ViewBag.Category == "Су" ? "active" : "")">Су</a>
+        <a href="/Home/Petitions?category=Білім" class="filter-btn @(ViewBag.Category == "Білім" ? "active" : "")">Білім</a>
+        <a href="/Home/Petitions?category=Денсаулық" class="filter-btn @(ViewBag.Category == "Денсаулық" ? "active" : "")">Денсаулық</a>
+        <a href="/Home/Petitions?category=Газификация" class="filter-btn @(ViewBag.Category == "Газификация" ? "active" : "")">Газификация</a>
+        <a href="/Home/Petitions?category=Интернет" class="filter-btn @(ViewBag.Category == "Интернет" ? "active" : "")">Интернет</a>
+    </div>
+
+    <div class="petitions-grid">
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <p>Әзірше петициялар жоқ</p>
+                <p style="font-size:0.9rem; margin-bottom:1.5rem;">Бірінші болып петиция жасаңыз!</p>
+                <a href="/Home/Submit" class="btn-primary">Петиция жасау</a>
+            </div>
+        }
+        else
+        {
+            @foreach (var p in Model)
+            {
+                var pct = p.GoalVotes > 0 ? (int)((double)p.VoteCount / p.GoalVotes * 100) : 0;
+                var hasVoted = votedIds.Contains(p.Id);
+
+                <div class="petition-card">
+                    <div class="petition-region">@p.Region — @p.Category</div>
+                    <h3>@p.Title</h3>
+                    <p>@p.Description</p>
+                    <div class="progress-wrap">
+                        <div class="progress-fill" style="width:@(pct)%"></div>
+                    </div>
+                    <div class="petition-footer">
+                        <span class="vote-count">
+                            <strong>@p.VoteCount</strong> / @p.GoalVotes дауыс (@pct%)
+                        </span>
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            <form method="post" action="/Home/Vote" style="margin:0;">
+                                <input type="hidden" name="id" value="@p.Id" />
+                                @if (hasVoted)
+                                {
+                                    <button type="submit" class="vote-btn" disabled
+                                            style="opacity:0.6; cursor:not-allowed; background:#888;">
+                                        Дауыс берілді ✓
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="vote-btn">Дауыс беру</button>
+                                }
+                            </form>
+                        }
+                        else
+                        {
+                            <a href="/Account/Login" class="vote-btn">Дауыс беру</a>
+                        }
+                    </div>
+                    <div class="petition-meta">
+                        @p.AuthorName · @p.CreatedAt.ToString("dd.MM.yyyy")
+                        @if (p.IsSolved)
+                        {
+                            <span class="badge green" style="margin-left:8px;">Шешілді ✓</span>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,56 @@
+﻿@model List<ayul_dayusy.Models.AppUser>
+@{
+    ViewData["Title"] = "Пайдаланушылар";
+}
+
+<div class="admin-wrap">
+    <div class="admin-sidebar">
+        <div class="admin-logo">Админ <span>панель</span></div>
+        <nav class="admin-nav">
+            <a href="/Admin/Index" class="admin-nav-link">Басты бет</a>
+            <a href="/Admin/Petitions" class="admin-nav-link">Петициялар</a>
+            <a href="/Admin/Users" class="admin-nav-link active">Пайдаланушылар</a>
+            <a href="/" class="admin-nav-link">Сайтқа оралу</a>
+        </nav>
+    </div>
+
+    <div class="admin-content">
+        <h1 class="admin-title">Пайдаланушылар — @Model.Count</h1>
+
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Аты-жөні</th>
+                        <th>Email</th>
+                        <th>Облыс</th>
+                        <th>Ауыл</th>
+                        <th>Тіркелген</th>
+                        <th>Әрекет</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var u in Model)
+                    {
+                        <tr>
+                            <td><strong>@u.FullName</strong></td>
+                            <td>@u.Email</td>
+                            <td>@u.Region</td>
+                            <td>@u.Village</td>
+                            <td>@u.CreatedAt.ToString("dd.MM.yy")</td>
+                            <td>
+                                <form method="post" action="/Admin/DeleteUser" style="margin:0;">
+                                    <input type="hidden" name="id" value="@u.Id" />
+                                    <button type="submit" class="admin-btn red"
+                                            onclick="return confirm('Жою керек пе?')">
+                                        Жою
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Петиция жасау";
+}
+
+<section class="auth-section">
+    <div class="auth-card" style="max-width:620px;">
+        <h2>Петиция жасау</h2>
+        <p class="auth-desc">Ауылыңыздағы мәселені жеткізіңіз</p>
+
+        <form method="post" action="/Home/Submit" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Тақырып</label>
+                <input type="text" name="title" placeholder="Мысалы: Ауыл жолын жөндеу" required />
+            </div>
+            <div class="form-group">
+                <label>Облыс</label>
+                <select name="region" required>
+                    <option value="">Таңдаңыз</option>
+                    <option>Алматы облысы</option>
+                    <option>Алматы қаласы</option>
+                    <option>Астана қаласы</option>
+                    <option>Шымкент қаласы</option>
+                    <option>Шығыс Қазақстан облысы</option>
+                    <option>Батыс Қазақстан облысы</option>
+                    <option>Солтүстік Қазақстан облысы</option>
+                    <option>Оңтүстік Қазақстан облысы</option>
+                    <option>Қарағанды облысы</option>
+                    <option>Павлодар облысы</option>
+                    <option>Ақтөбе облысы</option>
+                    <option>Атырау облысы</option>
+                    <option>Маңғыстау облысы</option>
+                    <option>Қостанай облысы</option>
+                    <option>Қызылорда облысы</option>
+                    <option>Жамбыл облысы</option>
+                    <option>Ақмола облысы</option>
+                    <option>Абай облысы</option>
+                    <option>Жетісу облысы</option>
+                    <option>Ұлытау облысы</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ауыл / Қала атауы</label>
+                <input type="text" name="village" placeholder="Мысалы: Үзінді ауылы" required />
+            </div>
+            <div class="form-group">
+                <label>Санат</label>
+                <select name="category" required>
+                    <option value="">Таңдаңыз</option>
+                    <option>Жол</option>
+                    <option>Су</option>
+                    <option>Білім</option>
+                    <option>Денсаулық</option>
+                    <option>Газификация</option>
+                    <option>Интернет</option>
+                    <option>Электр қуаты</option>
+                    <option>Тұрғын үй</option>
+                    <option>Басқа</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Сипаттама</label>
+                <textarea name="description" placeholder="Мәселені егжей-тегжейлі баяндаңыз..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Файлдар (фото, видео, құжат)</label>
+                <div class="file-upload-wrap">
+                    <input type="file" name="files" id="fileInput" multiple
+                           accept="image/*,video/*,.pdf,.doc,.docx"
+                           onchange="showFiles(this)" />
+                    <label for="fileInput" class="file-upload-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:24px;height:24px;">
+                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                        <span>Файл таңдаңыз немесе осы жерге сүйреңіз</span>
+                        <small>Фото, видео, PDF, Word — макс. 10MB</small>
+                    </label>
+                    <div id="fileList" class="file-list"></div>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; padding:14px;">
+                Жіберу →
+            </button>
+        </form>
+    </div>
+</section>
+
+<script>
+    function showFiles(input) {
+        const list = document.getElementById('fileList');
+        list.innerHTML = '';
+        Array.from(input.files).forEach(f => {
+            const div = document.createElement('div');
+            div.className = 'file-item';
+            div.innerHTML = '📎 ' + f.name + ' <small>(' + (f.size / 1024 / 1024).toFixed(2) + ' MB)</small>';
+            list.appendChild(div);
+        });
+    }
+</script>

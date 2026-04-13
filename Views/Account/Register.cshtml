@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Тіркелу";
+}
+
+<section class="auth-section">
+    <div class="auth-card">
+        <h2>Тіркелу</h2>
+        <p class="auth-desc">Ауыл Дауысы платформасына қош келдіңіз</p>
+
+        <form method="post" action="/Account/Register">
+            <div class="form-group">
+                <label>Аты-жөніңіз</label>
+                <input type="text" name="fullName" placeholder="Толық атыңыз" required />
+            </div>
+            <div class="form-group">
+                <label>Облыс</label>
+                <select name="region" required>
+                    <option value="">Таңдаңыз</option>
+                    <option>Алматы облысы</option>
+                    <option>Шығыс Қазақстан облысы</option>
+                    <option>Қарағанды облысы</option>
+                    <option>Оңтүстік Қазақстан облысы</option>
+                    <option>Павлодар облысы</option>
+                    <option>Солтүстік Қазақстан облысы</option>
+                    <option>Батыс Қазақстан облысы</option>
+                    <option>Астана қаласы</option>
+                    <option>Алматы қаласы</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ауыл атауы</label>
+                <input type="text" name="village" placeholder="Ауылыңыздың атауы" required />
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="email@example.com" required />
+            </div>
+            <div class="form-group">
+                <label>Құпиясөз</label>
+                <input type="password" name="password" placeholder="Кемінде 6 таңба" required />
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; padding:14px;">Тіркелу</button>
+        </form>
+
+        <p class="auth-link">
+            Аккаунтыңыз бар ма? <a href="/Account/Login">Кіру</a>
+        </p>
+    </div>
+</section>

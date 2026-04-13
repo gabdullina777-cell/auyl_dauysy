@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Қазақстан облыстары";
+}
+
+<div class="map-page">
+    <div class="map-header">
+        <span class="section-label">Деректер</span>
+        <h1 class="section-title">Қазақстан облыстары</h1>
+        <p class="section-desc">Облысты басыңыз — аудандар мен ауылдық округтер тізімін көріңіз</p>
+    </div>
+
+    <div style="margin-bottom:1.5rem;">
+        <input type="text" id="search" placeholder="Облыс іздеу..."
+               oninput="filterRegions()"
+               style="width:100%;padding:12px 16px;border:1.5px solid rgba(0,0,0,0.1);border-radius:8px;font-family:'Noto Sans',sans-serif;font-size:0.9rem;outline:none;" />
+    </div>
+
+    <div id="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:1.5rem;"></div>
+
+    <div id="detail" style="display:none;background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(0,0,0,0.06);">
+            <div>
+                <h2 id="d-title" style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:#1a3a2a;"></h2>
+                <p id="d-info" style="color:#7a6a55;font-size:0.88rem;margin-top:4px;"></p>
+            </div>
+            <button onclick="closeDetail()" style="background:transparent;border:none;font-size:1.2rem;cursor:pointer;color:#aaa;padding:4px 8px;">✕</button>
+        </div>
+        <div id="d-stats" style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;"></div>
+        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:#aaa;margin-bottom:0.75rem;">Аудандар</div>
+        <div id="d-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;"></div>
+    </div>
+</div>
+
+<script>
+    const regData = [
+      {name:'Абай облысы',center:'Семей',audan:10,ao:128,info:'2022 жылы құрылған. Орталығы — Семей қаласы.',
+       districts:[['Абай ауданы',9],['Ақсуат ауданы',9],['Аягөз ауданы',21],['Бесқарағай ауданы',10],['Бородулиха ауданы',17],['Жаңасемей ауданы',12],['Жарма ауданы',14],['Көкпекті ауданы',9],['Мақаншы ауданы',11],['Үржар ауданы',16]]},
+      {name:'Ақмола облысы',center:'Көкшетау',audan:17,ao:182,info:'Орталығы — Көкшетау. Халық саны: ~740 мың.',
+       districts:[['Ақкөл ауданы',7],['Аршалы ауданы',12],['Астрахан ауданы',11],['Атбасар ауданы',11],['Бурабай ауданы',9],['Бұланды ауданы',10],['Біржан сал ауданы',9],['Егіндікөл ауданы',7],['Ерейментау ауданы',10],['Есіл ауданы',12],['Жақсы ауданы',12],['Жарқайың ауданы',5],['Зеренді ауданы',20],['Қорғалжын ауданы',8],['Сандықтау ауданы',14],['Целиноград ауданы',16],['Шортанды ауданы',9]]},
+      {name:'Ақтөбе облысы',center:'Ақтөбе',audan:12,ao:133,info:'Орталығы — Ақтөбе. Халық саны: ~920 мың.',
+       districts:[['Алға ауданы',12],['Әйтеке би ауданы',15],['Байғанин ауданы',9],['Қарғалы ауданы',8],['Қобда ауданы',16],['Мәртөк ауданы',13],['Мұғалжар ауданы',12],['Ойыл ауданы',7],['Темір ауданы',9],['Хромтау ауданы',13],['Шалқар ауданы',12],['Ырғыз ауданы',7]]},
+      {name:'Алматы облысы',center:'Қонаев',audan:9,ao:129,info:'Орталығы — Қонаев. Халық саны: ~2,1 млн.',
+       districts:[['Балқаш ауданы',15],['Еңбекшіқазақ ауданы',25],['Жамбыл ауданы',24],['Кеген ауданы',12],['Қарасай ауданы',10],['Райымбек ауданы',11],['Талғар ауданы',10],['Ұйғыр ауданы',14],['Іле ауданы',8]]},
+      {name:'Атырау облысы',center:'Атырау',audan:7,ao:57,info:'Орталығы — Атырау. Мұнай өнеркәсібі.',
+       districts:[['Жылыой ауданы',5],['Индер ауданы',6],['Исатай ауданы',7],['Құрманғазы ауданы',19],['Қызылқоға ауданы',10],['Мақат ауданы',1],['Махамбет ауданы',9]]},
+      {name:'Батыс Қазақстан облысы',center:'Орал',audan:12,ao:146,info:'Орталығы — Орал. Жайық өзені.',
+       districts:[['Ақжайық ауданы',18],['Бәйтерек ауданы',22],['Бөкей ордасы ауданы',7],['Бөрлі ауданы',13],['Жаңақала ауданы',9],['Жәнібек ауданы',9],['Казталов ауданы',16],['Қаратөбе ауданы',8],['Сырым ауданы',12],['Тасқала ауданы',9],['Теректі ауданы',15],['Шыңғырлау ауданы',8]]},
+      {name:'Жамбыл облысы',center:'Тараз',audan:10,ao:150,info:'Орталығы — Тараз. Халық саны: ~1,2 млн.',
+       districts:[['Байзақ ауданы',18],['Жамбыл ауданы',17],['Жуалы ауданы',14],['Қордай ауданы',19],['Меркі ауданы',14],['Мойынқұм ауданы',13],['Сарысу ауданы',9],['Талас ауданы',13],['Тұрар Рысқұлов ауданы',15],['Шу ауданы',18]]},
+      {name:'Жетісу облысы',center:'Талдықорған',audan:8,ao:109,info:'2022 жылы құрылған. Орталығы — Талдықорған.',
+       districts:[['Ақсу ауданы',17],['Алакөл ауданы',23],['Ескелді ауданы',11],['Кербұлақ ауданы',15],['Көксу ауданы',10],['Қаратал ауданы',9],['Панфилов ауданы',12],['Сарқан ауданы',12]]},
+      {name:'Қарағанды облысы',center:'Қарағанды',audan:7,ao:132,info:'Орталығы — Қарағанды. Халық саны: ~1,4 млн.',
+       districts:[['Абай ауданы',11],['Ақтоғай ауданы',14],['Бұқар жырау ауданы',21],['Қарқаралы ауданы',23],['Нұра ауданы',23],['Осакаров ауданы',21],['Шет ауданы',19]]},
+      {name:'Қостанай облысы',center:'Қостанай',audan:16,ao:141,info:'Орталығы — Қостанай. Астық өңірі.',
+       districts:[['Алтынсарин ауданы',8],['Амангелді ауданы',10],['Әулиекөл ауданы',9],['Бейімбет Майлин ауданы',8],['Денисов ауданы',10],['Жангелді ауданы',7],['Жітіқара ауданы',8],['Қамысты ауданы',6],['Қарабалық ауданы',8],['Қарасу ауданы',13],['Қостанай ауданы',15],['Меңдіқара ауданы',10],['Науырзым ауданы',4],['Сарыкөл ауданы',5],['Ұзынкөл ауданы',9],['Фёдоров ауданы',11]]},
+      {name:'Қызылорда облысы',center:'Қызылорда',audan:7,ao:125,info:'Орталығы — Қызылорда. Сырдария өзені.',
+       districts:[['Арал ауданы',21],['Жалағаш ауданы',14],['Жаңақорған ауданы',24],['Қазалы ауданы',19],['Қармақшы ауданы',12],['Сырдария ауданы',13],['Шиелі ауданы',22]]},
+      {name:'Маңғыстау облысы',center:'Ақтау',audan:5,ao:31,info:'Орталығы — Ақтау. Каспий теңізі.',
+       districts:[['Бейнеу ауданы',3],['Қарақия ауданы',7],['Маңғыстау ауданы',9],['Мұнайлы ауданы',7],['Түпқараған ауданы',5]]},
+      {name:'Павлодар облысы',center:'Павлодар',audan:10,ao:102,info:'Орталығы — Павлодар. Ертіс өзені.',
+       districts:[['Аққулы ауданы',10],['Ақтоғай ауданы',7],['Баянауыл ауданы',12],['Ертіс ауданы',11],['Железин ауданы',12],['Май ауданы',11],['Павлодар ауданы',13],['Тереңкөл ауданы',12],['Успен ауданы',7],['Шарбақты ауданы',7]]},
+      {name:'Солтүстік Қазақстан облысы',center:'Петропавл',audan:13,ao:186,info:'Орталығы — Петропавл. Халық саны: ~540 мың.',
+       districts:[['Айыртау ауданы',14],['Ақжар ауданы',12],['Аққайың ауданы',12],['Ғабит Мүсірепов ауданы',17],['Есіл ауданы',16],['Жамбыл ауданы',13],['Қызылжар ауданы',19],['Мағжан Жұмабаев ауданы',17],['Мамлют ауданы',11],['Тайынша ауданы',18],['Тимирязев ауданы',16],['Уәлиханов ауданы',11],['Шал ақын ауданы',10]]},
+      {name:'Түркістан облысы',center:'Түркістан',audan:14,ao:159,info:'Орталығы — Түркістан. Халық саны: ~2,1 млн.',
+       districts:[['Бәйдібек ауданы',11],['Жетісай ауданы',11],['Келес ауданы',12],['Қазығұрт ауданы',13],['Мақтаарал ауданы',9],['Ордабасы ауданы',10],['Отырар ауданы',13],['Сайрам ауданы',11],['Сарыағаш ауданы',13],['Сауран ауданы',12],['Созақ ауданы',10],['Төле би ауданы',12],['Түлкібас ауданы',13],['Шардара ауданы',10]]},
+      {name:'Ұлытау облысы',center:'Жезқазған',audan:2,ao:24,info:'2022 жылы құрылған. Орталығы — Жезқазған.',
+       districts:[['Жаңаарқа ауданы',12],['Ұлытау ауданы',12]]},
+      {name:'Шығыс Қазақстан облысы',center:'Өскемен',audan:11,ao:92,info:'Орталығы — Өскемен. Алтай таулары.',
+       districts:[['Алтай ауданы',9],['Глубокое ауданы',13],['Зайсан ауданы',8],['Катонқарағай ауданы',7],['Күршім ауданы',7],['Марқакөл ауданы',5],['Самар ауданы',8],['Тарбағатай ауданы',8],['Ұлан ауданы',13],['Үлкен Нарын ауданы',6],['Шемонаиха ауданы',8]]}
+    ];
+
+    let activeReg = null;
+    let filteredReg = [...regData];
+
+    function renderGrid() {
+      const g = document.getElementById('grid');
+      g.innerHTML = '';
+      filteredReg.forEach(r => {
+        const d = document.createElement('div');
+        d.style.cssText = 'background:#fff;border:1px solid rgba(0,0,0,' + (activeReg===r.name?'0.2':'0.06') + ');border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;' + (activeReg===r.name?'border-color:#c8923a;':'');
+        d.onmouseenter = function(){if(activeReg!==r.name)this.style.borderColor='rgba(0,0,0,0.15)'};
+        d.onmouseleave = function(){if(activeReg!==r.name)this.style.borderColor='rgba(0,0,0,0.06)'};
+        d.innerHTML = '<div style="font-size:0.92rem;font-weight:500;color:#1a3a2a;margin-bottom:5px;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#c8923a;margin-right:7px;"></span>' + r.name + '</div><div style="font-size:0.78rem;color:#7a6a55;">' + r.center + ' · ' + r.audan + ' аудан · ' + r.ao + ' ауылдық округ</div>';
+        d.onclick = () => selectReg(r);
+        g.appendChild(d);
+      });
+    }
+
+    function selectReg(r) {
+      activeReg = r.name;
+      renderGrid();
+      const det = document.getElementById('detail');
+      det.style.display = 'block';
+      document.getElementById('d-title').textContent = r.name;
+      document.getElementById('d-info').textContent = r.info + ' Орталығы: ' + r.center + '.';
+      document.getElementById('d-stats').innerHTML =
+        '<div style="background:#f5f0e8;border-radius:8px;padding:12px 18px;flex:1;min-width:90px;"><div style="font-size:1.6rem;font-weight:500;color:#1a3a2a;">' + r.audan + '</div><div style="font-size:0.72rem;color:#7a6a55;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;">Аудан</div></div>' +
+        '<div style="background:#f5f0e8;border-radius:8px;padding:12px 18px;flex:1;min-width:90px;"><div style="font-size:1.6rem;font-weight:500;color:#1a3a2a;">' + r.ao + '</div><div style="font-size:0.72rem;color:#7a6a55;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;">Ауылдық округ</div></div>' +
+        '<div style="background:#f5f0e8;border-radius:8px;padding:12px 18px;flex:1;min-width:90px;"><div style="font-size:1.6rem;font-weight:500;color:#1a3a2a;">' + r.districts.reduce((s,d)=>s+d[1],0) + '</div><div style="font-size:0.72rem;color:#7a6a55;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;">Барлық округ</div></div>';
+      const dl = document.getElementById('d-list');
+      dl.innerHTML = '';
+      r.districts.forEach(([nm,cnt],i) => {
+        const el = document.createElement('div');
+        el.style.cssText = 'font-size:0.83rem;color:#2c1f0e;padding:8px 12px;border-radius:6px;background:#faf7f2;display:flex;justify-content:space-between;align-items:center;opacity:0;transform:translateY(6px);transition:all 0.15s;';
+        el.innerHTML = '<span>' + nm + '</span><span style="color:#7a6a55;font-size:0.75rem;">' + cnt + ' округ</span>';
+        dl.appendChild(el);
+        setTimeout(()=>{el.style.opacity='1';el.style.transform='translateY(0)'},i*25);
+      });
+      det.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+
+    function closeDetail() {
+      activeReg = null;
+      renderGrid();
+      document.getElementById('detail').style.display = 'none';
+    }
+
+    function filterRegions() {
+      const q = document.getElementById('search').value.toLowerCase();
+      filteredReg = regData.filter(r => r.name.toLowerCase().includes(q) || r.center.toLowerCase().includes(q));
+      renderGrid();
+    }
+
+    renderGrid();
+</script>

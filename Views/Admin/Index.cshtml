@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Админ панель";
+}
+
+<div class="admin-wrap">
+    <div class="admin-sidebar">
+        <div class="admin-logo">Админ <span>панель</span></div>
+        <nav class="admin-nav">
+            <a href="/Admin/Index" class="admin-nav-link active">Басты бет</a>
+            <a href="/Admin/Petitions" class="admin-nav-link">Петициялар</a>
+            <a href="/Admin/Users" class="admin-nav-link">Пайдаланушылар</a>
+            <a href="/" class="admin-nav-link">Сайтқа оралу</a>
+        </nav>
+    </div>
+
+    <div class="admin-content">
+        <h1 class="admin-title">Басқару тақтасы</h1>
+
+        <div class="admin-stats">
+            <div class="admin-stat-card">
+                <div class="admin-stat-num">@ViewBag.UserCount</div>
+                <div class="admin-stat-label">Тіркелген пайдаланушы</div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-num">@ViewBag.PetitionCount</div>
+                <div class="admin-stat-label">Барлық петиция</div>
+            </div>
+            <div class="admin-stat-card green">
+                <div class="admin-stat-num">@ViewBag.SolvedCount</div>
+                <div class="admin-stat-label">Шешілген</div>
+            </div>
+            <div class="admin-stat-card gold">
+                <div class="admin-stat-num">@ViewBag.PendingCount</div>
+                <div class="admin-stat-label">Күтуде</div>
+            </div>
+        </div>
+
+        <div class="admin-quick">
+            <h2 style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--dark-green); margin-bottom:1.5rem;">Жылдам өту</h2>
+            <div style="display:flex; gap:1rem;">
+                <a href="/Admin/Petitions" class="btn-primary">Петицияларды басқару</a>
+                <a href="/Admin/Users" class="btn-primary" style="background:var(--dark-green);">Пайдаланушылар</a>
+            </div>
+        </div>
+    </div>
+</div>
