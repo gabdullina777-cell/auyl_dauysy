@@ -3,6 +3,82 @@
 }
 
 <div class="map-page">
+    <div style="margin-bottom:2rem;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+    <div id="map" style="height:500px;width:100%;"></div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<script>
+const map = L.map('map').setView([48.0, 66.0], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+const markers = [
+    {name:'Астана қаласы', lat:51.18, lng:71.446},
+    {name:'Алматы қаласы', lat:43.238, lng:76.945},
+    {name:'Шымкент қаласы', lat:42.317, lng:69.596},
+    {name:'Шығыс Қазақстан облысы', lat:49.5, lng:82.6},
+    {name:'Батыс Қазақстан облысы', lat:51.2, lng:51.4},
+    {name:'Солтүстік Қазақстан облысы', lat:54.0, lng:69.5},
+    {name:'Ақмола облысы', lat:51.5, lng:69.0},
+    {name:'Павлодар облысы', lat:52.3, lng:76.9},
+    {name:'Қарағанды облысы', lat:49.8, lng:73.1},
+    {name:'Ақтөбе облысы', lat:50.3, lng:57.2},
+    {name:'Атырау облысы', lat:47.1, lng:51.9},
+    {name:'Маңғыстау облысы', lat:43.7, lng:51.9},
+    {name:'Қостанай облысы', lat:53.2, lng:63.6},
+    {name:'Қызылорда облысы', lat:44.85, lng:65.5},
+    {name:'Алматы облысы', lat:44.0, lng:77.5},
+    {name:'Оңтүстік Қазақстан облысы', lat:43.3, lng:68.4},
+    {name:'Жамбыл облысы', lat:43.0, lng:71.4},
+    {name:'Абай облысы', lat:50.4, lng:80.2},
+    {name:'Жетісу облысы', lat:45.0, lng:79.0},
+    {name:'Ұлытау облысы', lat:48.6, lng:67.8},
+];
+
+const greenIcon = L.divIcon({
+    className: '',
+    html: `<div style="width:14px;height:14px;background:#c8923a;border:2px solid #1a3a2a;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>`,
+    iconSize: [14,14],
+    iconAnchor: [7,7]
+});
+
+markers.forEach(m => {
+    L.marker([m.lat, m.lng], {icon: greenIcon})
+        .addTo(map)
+        .bindTooltip(m.name, {
+            permanent: false,
+            direction: 'top',
+            className: 'map-tip'
+        })
+        .on('click', () => {
+            const cards = document.querySelectorAll('.region-card');
+            cards.forEach(c => {
+                if (c.textContent.includes(m.name.replace(' облысы','').replace(' қаласы',''))) {
+                    c.click();
+                    c.scrollIntoView({behavior:'smooth', block:'center'});
+                }
+            });
+        });
+});
+</script>
+
+<style>
+.map-tip {
+    background: #1a3a2a;
+    color: #f5f0e8;
+    border: 1px solid #c8923a;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-family: 'Noto Sans', sans-serif;
+    box-shadow: none;
+}
+.leaflet-tooltip-bottom.map-tip::before { border-bottom-color: #c8923a; }
+</style>
     <div class="map-header">
         <span class="section-label">Деректер</span>
         <h1 class="section-title">Қазақстан облыстары</h1>
