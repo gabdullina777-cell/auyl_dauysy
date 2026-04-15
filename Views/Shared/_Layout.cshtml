@@ -18,10 +18,60 @@
         });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.mission-card, .step-card, .community-card, .about-grid, .petition-card').forEach(el => {
+    document.querySelectorAll('.mission-card, .step-card, .community-card, .petition-card, .about-grid').forEach((el, i) => {
         el.classList.add('reveal');
+        el.style.transitionDelay = (i * 0.08) + 's';
         observer.observe(el);
     });
+
+    document.querySelectorAll('.about-content').forEach(el => {
+        el.classList.add('reveal-right');
+        observer.observe(el);
+    });
+
+    document.querySelectorAll('.about-logo-wrap').forEach(el => {
+        el.classList.add('reveal-left');
+        observer.observe(el);
+    });
+
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('nav');
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    function animateCounters() {
+        document.querySelectorAll('.stat-num').forEach(el => {
+            const target = parseInt(el.textContent.replace(/,/g, ''));
+            if (isNaN(target)) return;
+            let current = 0;
+            const step = target / 60;
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    el.textContent = target.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    el.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        });
+    }
+
+    const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                heroObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const statsEl = document.querySelector('.hero-stats');
+    if (statsEl) heroObserver.observe(statsEl);
 </script>
 <body>
     <nav>
