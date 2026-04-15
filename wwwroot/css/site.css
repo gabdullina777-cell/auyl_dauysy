@@ -1729,3 +1729,277 @@ footer ul {
         gap: 0.75rem;
     }
 }
+/* ========== ANIMATIONS ========== */
+.hero-content {
+    animation: fadeInLeft 0.8s ease both;
+}
+
+.hero-stats {
+    animation: fadeInRight 0.8s ease 0.2s both;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.mission-card {
+    animation: fadeInUp 0.6s ease both;
+}
+
+.step-card {
+    animation: fadeInUp 0.6s ease both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mission-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.mission-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.mission-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.mission-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.step-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.step-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.step-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.step-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+/* ========== HERO УЛУЧШЕНИЕ ========== */
+.hero {
+    background: linear-gradient(135deg, #1a3a2a 0%, #0f2318 50%, #1a3a2a 100%);
+}
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8923a' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        pointer-events: none;
+    }
+
+/* ========== ABOUT SECTION УЛУЧШЕНИЕ ========== */
+.about-section {
+    position: relative;
+    overflow: hidden;
+}
+
+    .about-section::before {
+        content: '';
+        position: absolute;
+        right: -200px;
+        top: -200px;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: rgba(200,146,58,0.04);
+        pointer-events: none;
+    }
+
+/* ========== PETITION CARDS HOVER ========== */
+.petition-card {
+    position: relative;
+    overflow: hidden;
+}
+
+    .petition-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 0;
+        background: var(--gold);
+        transition: height 0.3s ease;
+    }
+
+    .petition-card:hover::before {
+        height: 100%;
+    }
+
+/* ========== COMMUNITY CARDS ========== */
+.community-card {
+    position: relative;
+    overflow: hidden;
+}
+
+    .community-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--gold);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .community-card:hover::after {
+        transform: scaleX(1);
+    }
+
+/* ========== SCROLL REVEAL ========== */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+    .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/* ========== FEATURE CARDS ========== */
+.feature-card {
+    position: relative;
+    overflow: hidden;
+}
+
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(to right, var(--gold), var(--gold-light));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+        transform-origin: left;
+    }
+
+    .feature-card:hover::after {
+        transform: scaleX(1);
+    }
+
+/* ========== NAV УЛУЧШЕНИЕ ========== */
+nav {
+    backdrop-filter: blur(10px);
+}
+
+    nav ul a {
+        position: relative;
+    }
+
+        nav ul a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transition: transform 0.2s ease;
+        }
+
+        nav ul a:hover::after {
+            transform: scaleX(1);
+        }
+
+/* ========== BUTTONS УЛУЧШЕНИЕ ========== */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+    .btn-primary::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255,255,255,0.15);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.4s ease, height 0.4s ease;
+    }
+
+    .btn-primary:hover::after {
+        width: 300px;
+        height: 300px;
+    }
+
+/* ========== SECTION DIVIDERS ========== */
+.how-section {
+    position: relative;
+}
+
+    .how-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 10%;
+        right: 10%;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(200,146,58,0.3), transparent);
+    }
+
+.community-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(0,0,0,0.08), transparent);
+}
+
+.community-section {
+    position: relative;
+}
