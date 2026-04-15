@@ -50,20 +50,36 @@
                                 }
                             </td>
                             <td>
-                                <div style="display:flex; gap:0.5rem;">
-                                    <form method="post" action="/Admin/SolvePetition" style="margin:0;">
+                                <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                                    <div style="display:flex;gap:0.5rem;">
+                                        <form method="post" action="/Admin/SolvePetition" style="margin:0;">
+                                            <input type="hidden" name="id" value="@p.Id" />
+                                            <button type="submit" class="admin-btn blue">
+                                                @(p.IsSolved ? "Қайту" : "Шешілді")
+                                            </button>
+                                        </form>
+                                        <form method="post" action="/Admin/DeletePetition" style="margin:0;">
+                                            <input type="hidden" name="id" value="@p.Id" />
+                                            <button type="submit" class="admin-btn red"
+                                                    onclick="return confirm('Жою керек пе?')">
+                                                Жою
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <form method="post" action="/Admin/AddComment" style="margin:0;display:flex;gap:0.5rem;">
                                         <input type="hidden" name="id" value="@p.Id" />
-                                        <button type="submit" class="admin-btn blue">
-                                            @(p.IsSolved ? "Қайту" : "Шешілді")
-                                        </button>
+                                        <input type="text" name="comment"
+                                               value="@p.AdminComment"
+                                               placeholder="Комментарий..."
+                                               style="flex:1;padding:5px 10px;border:1px solid rgba(0,0,0,0.1);border-radius:6px;font-size:0.78rem;font-family:'Noto Sans',sans-serif;" />
+                                        <button type="submit" class="admin-btn blue">Сақтау</button>
                                     </form>
-                                    <form method="post" action="/Admin/DeletePetition" style="margin:0;">
-                                        <input type="hidden" name="id" value="@p.Id" />
-                                        <button type="submit" class="admin-btn red"
-                                                onclick="return confirm('Жою керек пе?')">
-                                            Жою
-                                        </button>
-                                    </form>
+                                    @if (!string.IsNullOrEmpty(p.AdminComment))
+                                    {
+                                        <div style="font-size:0.75rem;color:var(--muted);font-style:italic;">
+                                            💬 @p.AdminComment
+                                        </div>
+                                    }
                                 </div>
                             </td>
                         </tr>

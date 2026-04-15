@@ -34,7 +34,17 @@ namespace ayul_dayusy.Controllers
                 .ToListAsync();
             return View(petitions);
         }
-
+        [HttpPost]
+        public async Task<IActionResult> AddComment(int id, string comment)
+        {
+            var petition = await _db.Petitions.FindAsync(id);
+            if (petition != null)
+            {
+                petition.AdminComment = comment;
+                await _db.SaveChangesAsync();
+            }
+            return RedirectToAction("Petitions");
+        }
         public async Task<IActionResult> Users()
         {
             var users = await _db.Users

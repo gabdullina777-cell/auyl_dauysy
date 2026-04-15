@@ -14,5 +14,6 @@
         public string AuthorId { get; set; } = "";
         public string AuthorName { get; set; } = "";
         public string Village { get; set; } = "";
+        public string AdminComment { get; set; } = "";
     }
 }
