@@ -1729,51 +1729,95 @@ footer ul {
         gap: 0.75rem;
     }
 }
-/* ========== ANIMATIONS ========== */
+/* ========== PREMIUM ANIMATIONS ========== */
+html {
+    scroll-behavior: smooth;
+}
+
+.hero {
+    background: #1a3a2a;
+    position: relative;
+    overflow: hidden;
+}
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        width: 800px;
+        height: 800px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(200,146,58,0.08) 0%, transparent 70%);
+        top: -200px;
+        right: -200px;
+        animation: floatBg 8s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(61,107,79,0.15) 0%, transparent 70%);
+        bottom: -150px;
+        left: -150px;
+        animation: floatBg 10s ease-in-out infinite reverse;
+        pointer-events: none;
+    }
+
+@keyframes floatBg {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -30px) scale(1.05);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) scale(0.95);
+    }
+}
+
 .hero-content {
-    animation: fadeInLeft 0.8s ease both;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-stats {
-    animation: fadeInRight 0.8s ease 0.2s both;
+    position: relative;
+    z-index: 1;
 }
 
-@keyframes fadeInLeft {
+.hero h1 {
+    overflow: hidden;
+}
+
+.hero-label {
+    animation: slideDown 0.6s ease both;
+}
+
+.hero h1 {
+    animation: slideUp 0.8s ease 0.2s both;
+}
+
+.hero-desc {
+    animation: slideUp 0.8s ease 0.4s both;
+}
+
+.hero-actions {
+    animation: slideUp 0.8s ease 0.6s both;
+}
+
+.hero-stats {
+    animation: slideUp 0.8s ease 0.4s both;
+}
+
+@keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateX(-30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.mission-card {
-    animation: fadeInUp 0.6s ease both;
-}
-
-.step-card {
-    animation: fadeInUp 0.6s ease both;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(24px);
+        transform: translateY(-20px);
     }
 
     to {
@@ -1782,120 +1826,33 @@ footer ul {
     }
 }
 
-.mission-card:nth-child(1) {
-    animation-delay: 0.1s;
-}
-
-.mission-card:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.mission-card:nth-child(3) {
-    animation-delay: 0.3s;
-}
-
-.mission-card:nth-child(4) {
-    animation-delay: 0.4s;
-}
-
-.step-card:nth-child(1) {
-    animation-delay: 0.1s;
-}
-
-.step-card:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.step-card:nth-child(3) {
-    animation-delay: 0.3s;
-}
-
-.step-card:nth-child(4) {
-    animation-delay: 0.4s;
-}
-
-/* ========== HERO УЛУЧШЕНИЕ ========== */
-.hero {
-    background: linear-gradient(135deg, #1a3a2a 0%, #0f2318 50%, #1a3a2a 100%);
-}
-
-    .hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8923a' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        pointer-events: none;
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
 
-/* ========== ABOUT SECTION УЛУЧШЕНИЕ ========== */
-.about-section {
-    position: relative;
-    overflow: hidden;
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-    .about-section::before {
-        content: '';
-        position: absolute;
-        right: -200px;
-        top: -200px;
-        width: 600px;
-        height: 600px;
-        border-radius: 50%;
-        background: rgba(200,146,58,0.04);
-        pointer-events: none;
-    }
-
-/* ========== PETITION CARDS HOVER ========== */
-.petition-card {
-    position: relative;
-    overflow: hidden;
+.stat-card {
+    transition: all 0.3s ease;
 }
 
-    .petition-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 3px;
-        height: 0;
-        background: var(--gold);
-        transition: height 0.3s ease;
+    .stat-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(200,146,58,0.4) !important;
+        background: rgba(255,255,255,0.07) !important;
     }
 
-    .petition-card:hover::before {
-        height: 100%;
-    }
-
-/* ========== COMMUNITY CARDS ========== */
-.community-card {
-    position: relative;
-    overflow: hidden;
-}
-
-    .community-card::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: var(--gold);
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
-
-    .community-card:hover::after {
-        transform: scaleX(1);
-    }
-
-/* ========== SCROLL REVEAL ========== */
+/* SCROLL REVEAL */
 .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
     .reveal.visible {
@@ -1903,13 +1860,36 @@ footer ul {
         transform: translateY(0);
     }
 
-/* ========== FEATURE CARDS ========== */
-.feature-card {
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+    .reveal-left.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+    .reveal-right.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+/* MISSION CARDS */
+.mission-card {
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
 
-    .feature-card::after {
+    .mission-card::before {
         content: '';
         position: absolute;
         top: 0;
@@ -1922,17 +1902,140 @@ footer ul {
         transform-origin: left;
     }
 
-    .feature-card:hover::after {
+    .mission-card:hover::before {
         transform: scaleX(1);
     }
 
-/* ========== NAV УЛУЧШЕНИЕ ========== */
-nav {
-    backdrop-filter: blur(10px);
+    .mission-card:hover {
+        transform: translateY(-6px);
+        background: rgba(255,255,255,0.1) !important;
+    }
+
+/* STEP CARDS */
+.step-card {
+    transition: all 0.3s ease;
 }
+
+    .step-card:hover .step-icon {
+        background: var(--dark-green);
+        border-color: var(--gold);
+        transform: scale(1.1);
+    }
+
+.step-icon {
+    transition: all 0.3s ease;
+}
+
+.step-card:hover .step-icon svg {
+    color: var(--gold) !important;
+}
+
+.step-num {
+    transition: all 0.3s ease;
+}
+
+.step-card:hover .step-num {
+    background: var(--gold);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* COMMUNITY CARDS */
+.community-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+    .community-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(to right, var(--gold), var(--gold-light));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .community-card:hover::after {
+        transform: scaleX(1);
+    }
+
+    .community-card:hover .community-icon {
+        transform: scale(1.2) rotate(5deg);
+        transition: transform 0.3s ease;
+    }
+
+.community-icon {
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+/* PETITION CARDS */
+.petition-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+    .petition-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--gold);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+        transform-origin: top;
+    }
+
+    .petition-card:hover::before {
+        transform: scaleY(1);
+    }
+
+/* BUTTONS */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+    .btn-primary::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255,255,255,0.15);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.5s ease, height 0.5s ease;
+    }
+
+    .btn-primary:hover::after {
+        width: 400px;
+        height: 400px;
+    }
+
+/* NAV */
+nav {
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+}
+
+    nav.scrolled {
+        background: rgba(15, 35, 24, 0.95) !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
 
     nav ul a {
         position: relative;
+        transition: color 0.2s;
     }
 
         nav ul a::after {
@@ -1951,55 +2054,104 @@ nav {
             transform: scaleX(1);
         }
 
-/* ========== BUTTONS УЛУЧШЕНИЕ ========== */
-.btn-primary {
+/* ABOUT SECTION */
+.about-section {
     position: relative;
     overflow: hidden;
 }
 
-    .btn-primary::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        background: rgba(255,255,255,0.15);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        transition: width 0.4s ease, height 0.4s ease;
+.about-logo {
+    transition: transform 0.4s ease;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.1));
+}
+
+    .about-logo:hover {
+        transform: scale(1.05) rotate(-2deg);
     }
 
-    .btn-primary:hover::after {
-        width: 300px;
-        height: 300px;
-    }
+/* COUNTER ANIMATION */
+.stat-num {
+    transition: all 0.3s ease;
+}
 
-/* ========== SECTION DIVIDERS ========== */
-.how-section {
+/* SECTION LABELS */
+.section-label {
     position: relative;
 }
 
-    .how-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 10%;
-        right: 10%;
-        height: 1px;
-        background: linear-gradient(to right, transparent, rgba(200,146,58,0.3), transparent);
-    }
-
-.community-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 10%;
-    right: 10%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(0,0,0,0.08), transparent);
+/* PROGRESS BAR ANIMATION */
+.progress-fill {
+    animation: growWidth 1.5s ease both;
 }
 
-.community-section {
-    position: relative;
+@keyframes growWidth {
+    from {
+        width: 0 !important;
+    }
+
+    to {
+    }
+}
+
+/* FLOATING ACTION */
+.float-btn {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 50px;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(200,146,58,0.4);
+    transition: all 0.3s ease;
+    z-index: 99;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: bounceIn 1s ease 1s both;
+}
+
+    .float-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(200,146,58,0.5);
+        color: #fff;
+    }
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    70% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* COUNTER */
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
