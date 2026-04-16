@@ -143,7 +143,7 @@ namespace ayul_dayusy.Controllers
             var client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
             client.DefaultRequestHeaders.Add("HTTP-Referer", "https://auyldauysy-production.up.railway.app");
-            client.DefaultRequestHeaders.Add("X-Title", "Ауыл Дауысы");
+            client.DefaultRequestHeaders.Add("X-Title", "Auyl Dausy");
 
             var prompt = $@"Сен Қазақстан ауылдарының мәселелерін ресми петицияға айналдыратын көмекшісің.
 
