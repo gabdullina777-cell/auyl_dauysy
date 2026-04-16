@@ -164,7 +164,7 @@ namespace ayul_dayusy.Controllers
 
             var body = new
             {
-                model = "meta-llama/llama-3.1-8b-instruct:free",
+                model = "arcee-ai/trinity-large-preview:free",
                 messages = new[]
                 {
                     new { role = "system", content = "Сен қазақ тілінде ресми петиция жазатын көмекшісің." },
