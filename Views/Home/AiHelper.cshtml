@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "ИИ Петиция Көмекшісі";
+}
+
+<div style="max-width:800px;margin:0 auto;padding:3rem 2rem;">
+
+    <div style="text-align:center;margin-bottom:3rem;">
+        <span class="section-label">Жасанды интеллект</span>
+        <h1 class="section-title" style="font-size:2.4rem;">ИИ Петиция Көмекшісі</h1>
+        <p style="color:var(--muted);font-size:1rem;line-height:1.8;max-width:560px;margin:0 auto;">
+            Мәселеңізді қысқаша сипаттаңыз — ИИ толық, грамотты петиция мәтінін жазып береді
+        </p>
+    </div>
+
+    <div style="background:#fff;border-radius:16px;border:1px solid var(--border);padding:2.5rem;margin-bottom:2rem;">
+        <form method="post" action="/Home/AiHelper">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label>Мәселеңізді қысқаша сипаттаңыз</label>
+                <textarea name="problemText" rows="4"
+                    placeholder="Мысалы: Ауылымыздың жолы өте нашар, жаңбырда балалар мектепке бара алмайды..."
+                    required style="width:100%;padding:12px 14px;border:1.5px solid rgba(0,0,0,0.1);border-radius:8px;font-family:'Noto Sans',sans-serif;font-size:0.9rem;resize:vertical;">@ViewBag.Problem</textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div class="form-group">
+                    <label>Облыс</label>
+                    <select name="region" required>
+                        <option value="">Таңдаңыз</option>
+                        <option @(ViewBag.Region=="Алматы облысы"?"selected":"")>Алматы облысы</option>
+                        <option @(ViewBag.Region=="Астана қаласы"?"selected":"")>Астана қаласы</option>
+                        <option @(ViewBag.Region=="Шымкент қаласы"?"selected":"")>Шымкент қаласы</option>
+                        <option @(ViewBag.Region=="Шығыс Қазақстан облысы"?"selected":"")>Шығыс Қазақстан облысы</option>
+                        <option @(ViewBag.Region=="Батыс Қазақстан облысы"?"selected":"")>Батыс Қазақстан облысы</option>
+                        <option @(ViewBag.Region=="Солтүстік Қазақстан облысы"?"selected":"")>Солтүстік Қазақстан облысы</option>
+                        <option @(ViewBag.Region=="Ақмола облысы"?"selected":"")>Ақмола облысы</option>
+                        <option @(ViewBag.Region=="Павлодар облысы"?"selected":"")>Павлодар облысы</option>
+                        <option @(ViewBag.Region=="Қарағанды облысы"?"selected":"")>Қарағанды облысы</option>
+                        <option @(ViewBag.Region=="Ақтөбе облысы"?"selected":"")>Ақтөбе облысы</option>
+                        <option @(ViewBag.Region=="Атырау облысы"?"selected":"")>Атырау облысы</option>
+                        <option @(ViewBag.Region=="Маңғыстау облысы"?"selected":"")>Маңғыстау облысы</option>
+                        <option @(ViewBag.Region=="Қостанай облысы"?"selected":"")>Қостанай облысы</option>
+                        <option @(ViewBag.Region=="Қызылорда облысы"?"selected":"")>Қызылорда облысы</option>
+                        <option @(ViewBag.Region=="Оңтүстік Қазақстан облысы"?"selected":"")>Оңтүстік Қазақстан облысы</option>
+                        <option @(ViewBag.Region=="Жамбыл облысы"?"selected":"")>Жамбыл облысы</option>
+                        <option @(ViewBag.Region=="Абай облысы"?"selected":"")>Абай облысы</option>
+                        <option @(ViewBag.Region=="Жетісу облысы"?"selected":"")>Жетісу облысы</option>
+                        <option @(ViewBag.Region=="Ұлытау облысы"?"selected":"")>Ұлытау облысы</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Санат</label>
+                    <select name="category" required>
+                        <option value="">Таңдаңыз</option>
+                        <option @(ViewBag.Category=="Жол"?"selected":"")>Жол</option>
+                        <option @(ViewBag.Category=="Су"?"selected":"")>Су</option>
+                        <option @(ViewBag.Category=="Білім"?"selected":"")>Білім</option>
+                        <option @(ViewBag.Category=="Денсаулық"?"selected":"")>Денсаулық</option>
+                        <option @(ViewBag.Category=="Газификация"?"selected":"")>Газификация</option>
+                        <option @(ViewBag.Category=="Интернет"?"selected":"")>Интернет</option>
+                        <option @(ViewBag.Category=="Электр қуаты"?"selected":"")>Электр қуаты</option>
+                        <option @(ViewBag.Category=="Басқа"?"selected":"")>Басқа</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;padding:14px;font-size:1rem;">
+                🤖 Петиция жасат →
+            </button>
+        </form>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div style="background:#fff5f5;border:1px solid #fed7d7;border-radius:8px;padding:16px;color:#c53030;margin-bottom:2rem;">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (ViewBag.Result != null)
+    {
+        <div style="background:#fff;border-radius:16px;border:1px solid var(--border);padding:2.5rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+                <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--dark-green);">
+                    ИИ жасаған петиция
+                </h3>
+                <button onclick="copyText()" class="btn-primary" style="padding:8px 20px;font-size:0.82rem;">
+                    Көшіру
+                </button>
+            </div>
+            <div id="resultText" style="white-space:pre-wrap;font-size:0.92rem;line-height:1.8;color:var(--text);">@ViewBag.Result</div>
+
+            <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;gap:1rem;">
+                <a href="/Home/Submit" class="btn-primary">
+                    Петиция беті →
+                </a>
+                <p style="color:var(--muted);font-size:0.85rem;align-self:center;">
+                    Мәтінді көшіріп, петиция бетіне қойыңыз
+                </p>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+function copyText() {
+    const text = document.getElementById('resultText').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Мәтін көшірілді!');
+    });
+}
+</script>

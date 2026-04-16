@@ -83,7 +83,68 @@ namespace ayul_dayusy.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("Petitions");
         }
+        public IActionResult AiHelper() => View();
 
+        [HttpPost]
+        public async Task<IActionResult> AiHelper(string problemText, string region, string category)
+        {
+            ViewBag.Problem = problemText;
+            ViewBag.Region = region;
+            ViewBag.Category = category;
+
+            if (!string.IsNullOrEmpty(problemText))
+            {
+                var apiKey = Environment.GetEnvironmentVariable("OPENROUTER_API_KEY");
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+                client.DefaultRequestHeaders.Add("HTTP-Referer", "https://auyldauysy-production.up.railway.app");
+
+                var prompt = $@"Сен Қазақстан ауылдарының мәселелерін ресми петицияға айналдыратын көмекшісің.
+
+Мәселе: {problemText}
+Облыс: {region}
+Санат: {category}
+
+Осы мәселе негізінде толық, грамотты, ресми қазақша петиция мәтінін жаз. 
+Петиция мынадай болуы керек:
+- Тақырып (1 жол)
+- Негізгі мәтін (3-4 абзац): мәселенің сипаттамасы, себептері, салдары, талаптар
+- Соңғы сөйлем: ресми өтініш
+
+Тек петиция мәтінін жаз, басқа түсіндірме берме.";
+
+                var body = new
+                {
+                    model = "mistralai/mistral-7b-instruct:free",
+                    messages = new[]
+                    {
+                new { role = "user", content = prompt }
+            }
+                };
+
+                var json = System.Text.Json.JsonSerializer.Serialize(body);
+                var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var response = await client.PostAsync("https://openrouter.ai/api/v1/chat/completions", content);
+                    var responseStr = await response.Content.ReadAsStringAsync();
+                    var doc = System.Text.Json.JsonDocument.Parse(responseStr);
+                    var result = doc.RootElement
+                        .GetProperty("choices")[0]
+                        .GetProperty("message")
+                        .GetProperty("content")
+                        .GetString();
+                    ViewBag.Result = result;
+                }
+                catch
+                {
+                    ViewBag.Error = "ИИ жауап бере алмады. Қайта көріңіз.";
+                }
+            }
+
+            return View();
+        }
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Vote(int id)
