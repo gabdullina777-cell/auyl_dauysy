@@ -115,7 +115,7 @@ namespace ayul_dayusy.Controllers
 
                 var body = new
                 {
-                    model = "mistralai/mistral-7b-instruct:free",
+                    model = "openai/gpt-oss-120b:free",
                     messages = new[]
                     {
                 new { role = "user", content = prompt }
