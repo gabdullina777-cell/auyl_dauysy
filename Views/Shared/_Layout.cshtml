@@ -84,12 +84,14 @@
         <ul style="display:flex; gap:2rem; list-style:none; align-items:center;">
             <li><a href="/Home/Petitions" style="color:#c8c0b2; text-decoration:none;">Петициялар</a></li>
             <li><a href="/Home/Submit" style="color:#c8c0b2; text-decoration:none;">Мәселе жіберу</a></li>
-            <li><a href="/Home/Map">🗺️ Карта</a></li>
+            <li><a href="/Home/Map" style="color:#c8c0b2; text-decoration:none;">🗺️ Карта</a></li>
+            <li><a href="/Home/AiHelper" style="color:#c8c0b2; text-decoration:none;">🤖 ИИ Көмекші</a></li>
             @if (User.Identity!.IsAuthenticated)
             {
                 <li style="color:#c8c0b2; font-size:0.85rem;">@User.Identity.Name</li>
                 <li>
                     <form method="post" action="/Account/Logout" style="margin:0;">
+                        @Html.AntiForgeryToken()
                         <button type="submit" style="background:transparent; border:1px solid rgba(255,255,255,0.2); color:#c8c0b2; padding:6px 16px; border-radius:4px; cursor:pointer; font-size:0.82rem;">
                             Шығу
                         </button>
@@ -104,7 +106,6 @@
                         Тіркелу
                     </a>
                 </li>
-                <li><a href="/Home/AiHelper">🤖 ИИ Көмекші</a></li>
             }
         </ul>
     </nav>
