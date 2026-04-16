@@ -58,12 +58,11 @@ namespace ayul_dayusy.Controllers
 
         [Authorize]
         public IActionResult Submit() => View();
-        public IActionResult Map() => View();
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Submit(string title, string description,
-      string region, string village, string category, List<IFormFile>? files)
+            string region, string village, string category, List<IFormFile>? files)
         {
             var user = await _db.Users
                 .FirstOrDefaultAsync(u => u.UserName == User.Identity!.Name);
@@ -83,68 +82,7 @@ namespace ayul_dayusy.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("Petitions");
         }
-        public IActionResult AiHelper() => View();
 
-        [HttpPost]
-        public async Task<IActionResult> AiHelper(string problemText, string region, string category)
-        {
-            ViewBag.Problem = problemText;
-            ViewBag.Region = region;
-            ViewBag.Category = category;
-
-            if (!string.IsNullOrEmpty(problemText))
-            {
-                var apiKey = Environment.GetEnvironmentVariable("OPENROUTER_API_KEY");
-                var client = new HttpClient();
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
-                client.DefaultRequestHeaders.Add("HTTP-Referer", "https://auyldauysy-production.up.railway.app");
-
-                var prompt = $@"Сен Қазақстан ауылдарының мәселелерін ресми петицияға айналдыратын көмекшісің.
-
-Мәселе: {problemText}
-Облыс: {region}
-Санат: {category}
-
-Осы мәселе негізінде толық, грамотты, ресми қазақша петиция мәтінін жаз. 
-Петиция мынадай болуы керек:
-- Тақырып (1 жол)
-- Негізгі мәтін (3-4 абзац): мәселенің сипаттамасы, себептері, салдары, талаптар
-- Соңғы сөйлем: ресми өтініш
-
-Тек петиция мәтінін жаз, басқа түсіндірме берме.";
-
-                var body = new
-                {
-                    model = "openai/gpt-oss-120b:free",
-                    messages = new[]
-                    {
-                new { role = "user", content = prompt }
-            }
-                };
-
-                var json = System.Text.Json.JsonSerializer.Serialize(body);
-                var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-
-                try
-                {
-                    var response = await client.PostAsync("https://openrouter.ai/api/v1/chat/completions", content);
-                    var responseStr = await response.Content.ReadAsStringAsync();
-                    var doc = System.Text.Json.JsonDocument.Parse(responseStr);
-                    var result = doc.RootElement
-                        .GetProperty("choices")[0]
-                        .GetProperty("message")
-                        .GetProperty("content")
-                        .GetString();
-                    ViewBag.Result = result;
-                }
-                catch
-                {
-                    ViewBag.Error = "ИИ жауап бере алмады. Қайта көріңіз.";
-                }
-            }
-
-            return View();
-        }
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Vote(int id)
@@ -172,6 +110,100 @@ namespace ayul_dayusy.Controllers
             }
 
             return RedirectToAction("Petitions");
+        }
+
+        public IActionResult Map() => View();
+
+        public IActionResult AiHelper() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> AiHelper(string problemText, string region, string category)
+        {
+            ViewBag.Problem = problemText;
+            ViewBag.Region = region;
+            ViewBag.Category = category;
+
+            if (!User.Identity!.IsAuthenticated)
+            {
+                ViewBag.Error = "Пайдалану үшін тіркелу қажет.";
+                return View();
+            }
+
+            if (string.IsNullOrWhiteSpace(problemText))
+                return View();
+
+            var apiKey = Environment.GetEnvironmentVariable("OPENROUTER_API_KEY");
+
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                ViewBag.Error = "API key табылмады.";
+                return View();
+            }
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+            client.DefaultRequestHeaders.Add("HTTP-Referer", "https://auyldauysy-production.up.railway.app");
+            client.DefaultRequestHeaders.Add("X-Title", "Ауыл Дауысы");
+
+            var prompt = $@"Сен Қазақстан ауылдарының мәселелерін ресми петицияға айналдыратын көмекшісің.
+
+Мәселе: {problemText}
+Облыс: {region}
+Санат: {category}
+
+Осы мәселе негізінде толық, грамотты, ресми қазақша петиция мәтінін жаз.
+Петиция мынадай құрылымда болуы керек:
+
+1. Тақырып: (қысқа, нақты)
+2. Мәселенің сипаттамасы: (2-3 сөйлем)
+3. Себептері мен салдары: (2-3 сөйлем)
+4. Талаптар: (нақты не істелуін сұрайды)
+5. Қорытынды өтініш: (1 сөйлем)
+
+Тек петиция мәтінін жаз, басқа түсіндірме берме. Қазақша жаз.";
+
+            var body = new
+            {
+                model = "meta-llama/llama-3.1-8b-instruct:free",
+                messages = new[]
+                {
+                    new { role = "system", content = "Сен қазақ тілінде ресми петиция жазатын көмекшісің." },
+                    new { role = "user", content = prompt }
+                },
+                max_tokens = 1000,
+                temperature = 0.7
+            };
+
+            var json = System.Text.Json.JsonSerializer.Serialize(body);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await client.PostAsync(
+                    "https://openrouter.ai/api/v1/chat/completions", content);
+                var responseStr = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    ViewBag.Error = "ИИ жауап бере алмады. Кейінірек қайта көріңіз.";
+                    return View();
+                }
+
+                var doc = System.Text.Json.JsonDocument.Parse(responseStr);
+                var result = doc.RootElement
+                    .GetProperty("choices")[0]
+                    .GetProperty("message")
+                    .GetProperty("content")
+                    .GetString();
+
+                ViewBag.Result = result;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Қате шықты: {ex.Message}";
+            }
+
+            return View();
         }
     }
 }
